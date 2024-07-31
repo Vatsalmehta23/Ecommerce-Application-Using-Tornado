@@ -1,12 +1,10 @@
 import requests
 import time
 import razorpay
-
-RAZORPAY_KEY_ID = "rzp_test_qr1cOGw8NE152R"
-RAZORPAY_KEY_SECRET = "8VtyMiuYrkkOdyfwcdxZ3MOq"
+from config import Config
 
 def create_razorpay_order(amount):
-    client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+    client = razorpay.Client(auth=(Config.RAZORPAY_KEY_ID, Config.RAZORPAY_KEY_SECRET))
     try:
         start_time = time.time()
         order = client.order.create({
