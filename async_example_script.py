@@ -1,4 +1,3 @@
-import aiohttp
 import asyncio
 import time
 import razorpay
@@ -9,7 +8,7 @@ async def create_razorpay_order(amount):
     try:
         start_time = time.time()
         order = client.order.create({
-            "amount": amount * 100,  
+            "amount": amount * 100,
             "currency": "INR",
         })
         end_time = time.time()
@@ -18,7 +17,7 @@ async def create_razorpay_order(amount):
         raise RuntimeError(f"Error creating Razorpay order: {str(e)}")
 
 async def main():
-    amount = 1000  
+    amount = 4
     num_concurrent_requests = 5  
 
     start_time = time.time() 
@@ -31,10 +30,11 @@ async def main():
         except Exception as e:
             print(f"Failed to create order: {e}")
 
-    tasks = [create_order(i) for i in range(num_concurrent_requests)]
-    await asyncio.gather(*tasks)
+    # Sequentially await each task
+    for i in range(num_concurrent_requests):
+        await create_order(i)
 
-    end_time = time.time()  
+    end_time = time.time()
     total_time = end_time - start_time
     print(f"Total throughput time: {total_time:.4f} seconds")
 
